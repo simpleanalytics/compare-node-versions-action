@@ -7,6 +7,10 @@ const workflowRegex =
   /node-version:\s\[?"?([0-9]+(\.[0-9]+)?(\.[0-9]+)?)"?\]?/i;
 
 const checkVersionConsistency = async (additionalFilePaths) => {
+  if (additionalFilePaths.length > 0)
+    core.info(`Additional files to check: ${additionalFilePaths.join(", ")}`);
+  else core.info(`No additional files to check`);
+
   const rootPath = ".";
   const predefinedPaths = {
     packageJson: path.join(rootPath, "package.json"),
@@ -79,7 +83,9 @@ const checkVersionConsistency = async (additionalFilePaths) => {
     ])
     .write();
 
-  if (multipleVersions) throw new Error("Multiple Node.js versions detected");
+  if (multipleVersions) {
+    core.setFailed(`Multiple Node.js versions detected`);
+  }
 
   console.log(`Node.js version is consistent across all files: ${versions[0]}`);
 };
