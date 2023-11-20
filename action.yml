@@ -1,0 +1,10 @@
+name: "Check Node.js Version Consistency"
+description: "Checks for consistent Node.js versions across various files."
+inputs:
+  additionalFiles:
+    description: "JSON array of additional file paths to check for Node.js version."
+    required: false
+    default: "[]"
+runs:
+  using: "node20"
+  main: "index.js"
