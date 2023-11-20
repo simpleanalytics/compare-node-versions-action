@@ -6,7 +6,7 @@ const workflowRegex =
   /node-version:\s\[?"?([0-9]+(\.[0-9]+)?(\.[0-9]+)?)"?\]?/i;
 
 const checkVersionConsistency = async (additionalFilePaths) => {
-  const rootPath = path.join(__dirname, ".."); // Adjust according to your project structure
+  const rootPath = ".";
   const predefinedPaths = {
     packageJson: path.join(rootPath, "package.json"),
     nvmrc: path.join(rootPath, ".nvmrc"),
