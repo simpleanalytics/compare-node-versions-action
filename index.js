@@ -1,5 +1,6 @@
 const fs = require("fs").promises;
 const path = require("path");
+const core = require("@actions/core");
 
 const dockerRegex = /FROM\snode:([0-9]+(\.[0-9]+)?(\.[0-9]+)?)/i;
 const workflowRegex =
@@ -29,7 +30,7 @@ const checkVersionConsistency = async (additionalFilePaths) => {
     } catch (error) {
       if (
         error.code === "ENOENT" &&
-        filePath !== allPaths.packageJson &&
+        filePath !== allPaths.nvmrc &&
         filePath !== allPaths.dockerfile
       ) {
         return null; // File not essential
@@ -56,10 +57,29 @@ const checkVersionConsistency = async (additionalFilePaths) => {
     })
     .filter(Boolean);
 
-  // Checking consistency
-  if (new Set(versions).size !== 1) {
-    throw new Error(`Node.js version mismatch: ${JSON.stringify(versions)}`);
-  }
+  const multipleVersions = new Set(versions).size !== 1;
+
+  const heading = multipleVersions
+    ? "❌ Node.js versions (multiple versions detected)"
+    : "✅ Node.js versions";
+
+  const table = allPaths.map((filePath, index) => {
+    const key = Object.keys(allPaths)[index];
+    return [key, versions[index] ?? "Not found"];
+  });
+
+  await core.summary
+    .addHeading(heading)
+    .addTable([
+      [
+        { data: "File", header: true },
+        { data: "Node.js version", header: true },
+      ],
+      ...table,
+    ])
+    .write();
+
+  if (multipleVersions) throw new Error("Multiple Node.js versions detected");
 
   console.log(`Node.js version is consistent across all files: ${versions[0]}`);
 };
