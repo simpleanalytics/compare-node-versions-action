@@ -23,8 +23,7 @@ const checkVersionConsistency = async (additionalFilePaths) => {
 
   // Add additional file paths
   additionalFilePaths.forEach((filePath) => {
-    const key = filePath.split("/").pop(); // Generating a unique key based on file name
-    allPaths[key] = path.join(rootPath, filePath);
+    allPaths[filePath] = path.join(rootPath, filePath);
   });
 
   // Function to read file content
@@ -56,7 +55,8 @@ const checkVersionConsistency = async (additionalFilePaths) => {
       if (key === "packageJson") return JSON.parse(content).engines.node;
       if (key === "nvmrc") return content.trim();
       if (key === "dockerfile") return content.match(dockerRegex)?.[1];
-      if (key.includes("yml")) return content.match(workflowRegex)?.[1];
+      if (key.includes(".yml") || key.includes(".yaml"))
+        return content.match(workflowRegex)?.[1];
       return null;
     })
     .filter(Boolean);
