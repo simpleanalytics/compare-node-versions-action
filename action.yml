@@ -5,7 +5,7 @@ branding:
   icon: "search"
   color: "red"
 inputs:
-  additionalFiles:
+  additional_files:
     description: "Comma separated list additional file paths to check for Node.js version."
     required: false
     default: ""
@@ -13,4 +13,4 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - ${{ inputs.additionalFiles }}
+    - "${{ inputs.additional_files }}"

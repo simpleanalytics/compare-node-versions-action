@@ -91,8 +91,8 @@ const checkVersionConsistency = async (additionalFilePaths) => {
 };
 
 // Parse additional file paths from environment variable as JSON
-const additionalFilePaths = process.env.INPUT_ADDITIONALFILES
-  ? process.env.INPUT_ADDITIONALFILES.split(/ ?, ?/g)
+const additionalFilePaths = process.env.INPUT_ADDITIONAL_FILES
+  ? process.env.INPUT_ADDITIONAL_FILES.split(/ ?, ?/g)
   : [];
 
 checkVersionConsistency(additionalFilePaths).catch((error) => {
